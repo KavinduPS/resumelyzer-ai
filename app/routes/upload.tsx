@@ -28,7 +28,7 @@ const upload = () => {
   };
 
   return (
-    <main className="bg-[url('/images/bg-main.jpg')] bg-cover p-5">
+    <main className="bg-[url('/images/bg-main.png')] bg-cover p-5">
       <Navbar />
       <section>
         <div className="flex flex-col items-center my-10 gap-8">
