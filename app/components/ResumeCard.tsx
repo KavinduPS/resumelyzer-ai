@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router";
 import type { Resume } from "types";
 import ScoreCircle from "./ScoreCircle";

@@ -23,7 +23,7 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
   };
 
   return (
-    <div className="w-full bg-indigo-100 rounded-lg p-4">
+    <div className="w-full bg-white rounded-lg p-4">
       <input
         ref={fileInputRef}
         id="file-upload"
@@ -35,7 +35,7 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
         className="hidden"
       />
       {file ? (
-        <div className="flex flex-row justify-between items-center bg-white p-3 rounded-lg">
+        <div className="flex flex-col flex-wrap gap-3 justify-between items-center bg-white rounded-lg sm:flex-row sm:py-3">
           <img src="images/pdf-icon.png" className="size-12" />
           <div className="flex flex-col items-center">
             <p className="text-sm text-zinc-500">{file.name}</p>

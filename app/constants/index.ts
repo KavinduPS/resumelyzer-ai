@@ -412,3 +412,115 @@ export const resumes: Resume[] = [
     },
   },
 ];
+
+export const prompt = (
+  companyName: string,
+  jobTitle: string,
+  jobDescription: string,
+  resumeText: string
+) => `You are an expert resume reviewer and ATS specialist. Analyze the following resume against the job requirements and provide feedback in EXACTLY the JSON format specified below. Do not include any other text, explanations, or markdown formatting - only return the raw JSON object.
+
+**Job Details:**
+Company: ${companyName}
+Position: ${jobTitle}
+Job Description: ${jobDescription}
+
+**Resume Text:**
+${resumeText}
+
+**CRITICAL INSTRUCTIONS:**
+1. Return ONLY a valid JSON object - no additional text, no markdown formatting, no explanations
+2. All scores should be between 0-100
+3. Each category should have 2-4 tips
+4. Mix "good" and "improve" tips appropriately
+5. Make tips specific and actionable
+6. Consider ATS compatibility, keyword matching, and job relevance
+
+**Required JSON Format:**
+{
+  "overallScore": <number>,
+  "ATS": {
+    "score": <number>,
+    "tips": [
+      {
+        "type": "good" | "improve",
+        "tip": "<specific tip>",
+        "explanation": "<detailed explanation>"
+      }
+    ]
+  },
+  "toneAndStyle": {
+    "score": <number>,
+    "tips": [
+      {
+        "type": "good" | "improve",
+        "tip": "<specific tip>",
+        "explanation": "<detailed explanation>"
+      }
+    ]
+  },
+  "content": {
+    "score": <number>,
+    "tips": [
+      {
+        "type": "good" | "improve",
+        "tip": "<specific tip>",
+        "explanation": "<detailed explanation>"
+      }
+    ]
+  },
+  "structure": {
+    "score": <number>,
+    "tips": [
+      {
+        "type": "good" | "improve",
+        "tip": "<specific tip>",
+        "explanation": "<detailed explanation>"
+      }
+    ]
+  },
+  "skills": {
+    "score": <number>,
+    "tips": [
+      {
+        "type": "good" | "improve",
+        "tip": "<specific tip>",
+        "explanation": "<detailed explanation>"
+      }
+    ]
+  }
+}
+
+**Evaluation Criteria:**
+
+**ATS (Applicant Tracking System):**
+- Keyword optimization for the specific job
+- Formatting compatibility (no tables, images, special characters)
+- Standard section headings
+- File format and parsing friendliness
+
+**Tone and Style:**
+- Professional language and tone
+- Action verbs and quantified achievements
+- Consistency in tense and voice
+- Appropriate level of formality for the industry
+
+**Content:**
+- Relevance to the target position
+- Quantified accomplishments and impact
+- Skills and experience alignment with job requirements
+- Completeness of important sections
+
+**Structure:**
+- Logical flow and organization
+- Appropriate length and white space
+- Clear section breaks and readability
+- Contact information and basic formatting
+
+**Skills:**
+- Technical skills alignment with job requirements
+- Soft skills demonstration through examples
+- Skill level appropriateness
+- Industry-relevant competencies
+
+Return only the JSON object with no additional formatting or text.`;

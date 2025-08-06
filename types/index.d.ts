@@ -50,3 +50,11 @@ export interface Resume {
   resumePath: string;
   feedback: Feedback;
 }
+
+export interface CVFeedback {
+  company_name: string;
+  job_title: string;
+  job_description: string;
+  resume_url: string;
+  feedback: Feedback;
+}

@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <main className="bg-[url('/images/bg-main.png')] bg-cover p-5">
+    <main className="bg-[url('/images/bg-main.png')] bg-cover min-h-screen p-5">
       <Navbar />
 
       <section>

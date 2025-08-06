@@ -1,39 +1,80 @@
-import React from "react";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  SignInButton,
-  SignIn,
-} from "@clerk/react-router";
+import { supabase } from "libs/supabase/client";
+import React, { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router";
+import Navbar from "~/components/Navbar";
 
 const Auth = () => {
-  return (
-    <div className="min-h-screen bg-red-500 flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        {/* Header */}
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Sign in or up route
-        </h1>
+  const [errorMessage, setErrorMessage] = useState<string | null>();
+  const navigate = useNavigate();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (!form) return;
+    const formData = new FormData(form);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+      if (data.user) {
+        navigate("/upload");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-        {/* Clerk SignIn Component */}
-        <SignIn
-          path="/auth"
-          fallbackRedirectUrl={"/"}
-          appearance={{
-            elements: {
-              card: "shadow-none", // Remove default card styling since we have our own container
-              rootBox: "w-full",
-              formButtonPrimary: "bg-blue-600 hover:bg-blue-700 text-white",
-              formFieldInput: "border border-gray-300 rounded-md px-3 py-2",
-              headerTitle: "text-xl font-semibold text-gray-800",
-              headerSubtitle: "text-gray-600",
-            },
-          }}
-        />
-      </div>
-    </div>
+  return (
+    <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
+      <Navbar />
+      <section className="flex justify-center">
+        <div className="p-8  max-w-md w-full mt-10 flex flex-col gap-5">
+          <h1 className="text-2xl font-bold text-center text-gray-800">
+            Welcome
+          </h1>
+          <h2>Log In to Transform Your Resume into a Job-Winning Tool</h2>
+          <form
+            className="flex flex-col justify-center gap-8 "
+            onSubmit={handleSubmit}
+          >
+            <div className="form-item">
+              <label htmlFor="email" className="text-sm">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="john@email.om"
+                name="email"
+                className="input-item"
+              />
+            </div>
+            <div className="form-item">
+              <label htmlFor="password" className="text-sm">
+                Password
+              </label>
+              <input
+                type="password"
+                placeholder="password"
+                name="password"
+                className="input-item"
+              />
+            </div>
+            <button className="primary-button">Log In</button>
+            {errorMessage && (
+              <div className="bg-rose-200 rounded-xl text-center px-2 py-1">
+                <p className="text-black text-sm">{errorMessage}</p>
+              </div>
+            )}
+          </form>
+        </div>
+      </section>
+    </main>
   );
 };
 
