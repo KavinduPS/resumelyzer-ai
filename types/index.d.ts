@@ -56,5 +56,6 @@ export interface CVFeedback {
   job_title: string;
   job_description: string;
   resume_url: string;
+  resume_img_url: string;
   feedback: Feedback;
 }

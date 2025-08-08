@@ -6,11 +6,10 @@ import Navbar from "~/components/Navbar";
 import pdfToText from "react-pdftotext";
 import { useNavigate } from "react-router";
 import { supabase } from "libs/supabase/client";
-// import { Auth } from "@supabase/auth-ui-react";
 import Auth from "./auth";
 import type { Session } from "@supabase/supabase-js";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
 import useSupabase from "hooks/supabase/useSupabase";
+import { convertPdfToImage } from "libs/utils";
 
 interface ResumeData {
   companyName: string;
@@ -23,8 +22,9 @@ const upload = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [statusText, setStatusText] = useState<string>("");
   const [file, setFile] = useState<File | null>();
+  const [image, setImage] = useState<string | null>();
   const [session, setSession] = useState<Session | null>(null);
-  const { saveFeedback } = useSupabase();
+  const { saveFeedback, saveImage } = useSupabase();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,8 +50,20 @@ const upload = () => {
     file,
   }: ResumeData) => {
     setIsProcessing(true);
+    console.log(session?.user.id);
     setStatusText("Uploading resume...");
     const resumeUrl = await uploadFile(file);
+    setStatusText("Converting to image...");
+    const pdfImage = await convertPdfToImage(file);
+    setStatusText("Saving image...");
+
+    const imageUrl = await saveImage(
+      session?.user.id!,
+      pdfImage.name,
+      pdfImage
+    );
+    console.log("url", imageUrl);
+    if (!imageUrl) throw new Error("Error getting resume");
 
     setStatusText("Reading resume...");
     const resumeText = await pdfToText(file);
@@ -63,16 +75,17 @@ const upload = () => {
       resumeText,
     });
 
-    const fb = saveFeedback({
+    const feedbackId = await saveFeedback({
       company_name: companyName,
       job_description: jobDescription,
       job_title: jobTitle,
       resume_url: resumeUrl,
+      resume_img_url: imageUrl,
       feedback,
     });
-    console.log(fb);
+
     setStatusText("Completed! Redirecting...");
-    navigate("/feedback", { state: feedback });
+    navigate(`/feedback/${feedbackId}`);
     setIsProcessing(false);
   };
 
@@ -101,7 +114,8 @@ const upload = () => {
             {isProcessing ? (
               <>
                 <h2>{statusText}</h2>
-                <img src="/images/resume-upload.gif" className="size-24"></img>
+                {image && <img src={image} className="size-64" />}
+                <img src="/images/resume-upload.gif" className="size-48"></img>
               </>
             ) : (
               <h2>Drop Your Resume for ATS Score and Feedback</h2>

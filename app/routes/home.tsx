@@ -2,7 +2,6 @@ import Navbar from "~/components/Navbar";
 import type { Route } from "./+types/home";
 import { resumes } from "~/constants";
 import ResumeCard from "~/components/ResumeCard";
-import { SignIn, SignInButton } from "@clerk/react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
