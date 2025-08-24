@@ -23,32 +23,49 @@ const useSupabase = () => {
     try {
       const { data, error } = await supabase
         .from("cv_feedback")
-        .select("feedback")
+        .select()
         .eq("id", id)
         .single();
       if (error) {
         console.log(error);
       }
-      if (data) return data.feedback;
+      if (data) return data;
     } catch (error) {
       console.log(error);
     }
   };
 
   const saveImage = async (userId: string, path: string, file: File) => {
-    const filePath = sanitizeFileName(path);
-    const { data, error } = await supabase.storage
-      .from("resume-images")
-      .upload(`${userId}/${filePath}`, file);
-    if (error) {
+    try {
+      const filePath = sanitizeFileName(path);
+      const { data, error } = await supabase.storage
+        .from("resume-images")
+        .upload(`${userId}/${filePath}`, file, { upsert: true });
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("image path", data.path);
+        return data.path;
+      }
+    } catch (error) {
       console.log(error);
-    } else {
-      console.log("image path", data.path);
-      return data.path;
     }
   };
 
-  return { saveFeedback, getFeedback, saveImage };
+  const getImage = async (imageUrl: string) => {
+    try {
+      console.log(imageUrl);
+      const { data, error } = await supabase.storage
+        .from("resume-images")
+        .download(imageUrl);
+      if (error) {
+        console.log(error);
+      }
+      return data;
+    } catch (error) {}
+  };
+
+  return { saveFeedback, getFeedback, saveImage, getImage };
 };
 
 export default useSupabase;

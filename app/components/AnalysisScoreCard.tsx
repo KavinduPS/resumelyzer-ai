@@ -27,7 +27,7 @@ const AnalysisScoreCard = ({
         </div>
       </div>
       {tips.map((item) => (
-        <p>{item.tip}</p>
+        <p key={tips.indexOf(item)}>{item.tip}</p>
       ))}
     </div>
   );

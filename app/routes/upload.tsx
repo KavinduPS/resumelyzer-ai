@@ -50,7 +50,6 @@ const upload = () => {
     file,
   }: ResumeData) => {
     setIsProcessing(true);
-    console.log(session?.user.id);
     setStatusText("Uploading resume...");
     const resumeUrl = await uploadFile(file);
     setStatusText("Converting to image...");
@@ -62,7 +61,6 @@ const upload = () => {
       pdfImage.name,
       pdfImage
     );
-    console.log("url", imageUrl);
     if (!imageUrl) throw new Error("Error getting resume");
 
     setStatusText("Reading resume...");
