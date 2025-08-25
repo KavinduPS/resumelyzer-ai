@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import type { CVFeedback, Feedback } from "types";
 import AnalysisScoreCard from "~/components/AnalysisScoreCard";
+import ATSCard from "~/components/ATSCard";
 import Navbar from "~/components/Navbar";
+import ScoreSummary from "~/components/ScoreSummary";
 
 const Feedback = () => {
   const { id } = useParams();
@@ -31,40 +33,19 @@ const Feedback = () => {
     <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
       <Navbar />
       <h1 className="my-3">Resume Review</h1>
-      <div className="w-full flex flex-col-reverse gap-5 md:flex-row md:items-center">
-        <section className="flex items-center bg-red-200 justify-center p-10 md:w-1/2">
+      <div className="w-full flex flex-col-reverse gap-5 md:flex-row">
+        <section className="flex items-center justify-center p-10 md:max-w-1/2">
           {cvImage && (
             <img src={URL.createObjectURL(cvImage)} className="size-3/4" />
           )}
         </section>
-        <section className="flex flex-col gap-5 bg-red-200 md:w-1/2">
+        <section className="flex flex-col justify-center items-center gap-5 w-full">
           {feedback && (
-            <>
-              <AnalysisScoreCard
-                title="Tone & Style"
-                comment={feedback.toneAndStyle.tips[0].type}
-                score={feedback.toneAndStyle.score}
-                tips={feedback.toneAndStyle.tips}
-              />
-              <AnalysisScoreCard
-                title="Content"
-                comment={feedback.content.tips[0].type}
-                score={feedback.content.score}
-                tips={feedback.content.tips}
-              />
-              <AnalysisScoreCard
-                title="Structure"
-                comment={feedback.structure.tips[0].type}
-                score={feedback.structure.score}
-                tips={feedback.structure.tips}
-              />
-              <AnalysisScoreCard
-                title="Skills"
-                comment={feedback.skills.tips[0].type}
-                score={feedback.skills.score}
-                tips={feedback.skills.tips}
-              />
-            </>
+            <div className="flex flex-col gap-5">
+              <ScoreSummary feedback={feedback} />
+              <ATSCard score={feedback.ATS.score} tips={feedback.ATS.tips} />
+              {/* <FeedbackDetails /> */}
+            </div>
           )}
         </section>
       </div>
