@@ -2,6 +2,7 @@ import useSupabase from "hooks/supabase/useSupabase";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import type { CVFeedback, Feedback } from "types";
+import { Accordian } from "~/components/Accordian";
 import AnalysisScoreCard from "~/components/AnalysisScoreCard";
 import ATSCard from "~/components/ATSCard";
 import Navbar from "~/components/Navbar";
@@ -45,6 +46,7 @@ const Feedback = () => {
               <ScoreSummary feedback={feedback} />
               <ATSCard score={feedback.ATS.score} tips={feedback.ATS.tips} />
               {/* <FeedbackDetails /> */}
+              <Accordian feedback={feedback} />
             </div>
           )}
         </section>
