@@ -35,9 +35,12 @@ const Feedback = () => {
       <Navbar />
       <h1 className="my-3">Resume Review</h1>
       <div className="w-full flex flex-col-reverse gap-5 md:flex-row">
-        <section className="flex items-center justify-center p-10 md:max-w-1/2">
+        <section className="flex items-center justify-center p-10 sticky top-0 max-h-screen w-full">
           {cvImage && (
-            <img src={URL.createObjectURL(cvImage)} className="size-3/4" />
+            <img
+              src={URL.createObjectURL(cvImage)}
+              className="object-contain max-w-full max-h-screen"
+            />
           )}
         </section>
         <section className="flex flex-col justify-center items-center gap-5 w-full">
