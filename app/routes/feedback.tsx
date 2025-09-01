@@ -1,9 +1,14 @@
 import useSupabase from "hooks/supabase/useSupabase";
+import { CheckCircle, AlertCircle, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import type { CVFeedback, Feedback } from "types";
-import { Accordian } from "~/components/Accordian";
-import AnalysisScoreCard from "~/components/AnalysisScoreCard";
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionContent,
+} from "~/components/Accordian";
 import ATSCard from "~/components/ATSCard";
 import Navbar from "~/components/Navbar";
 import ScoreSummary from "~/components/ScoreSummary";
@@ -30,6 +35,88 @@ const Feedback = () => {
     getFeedbackData();
   }, [id]);
 
+  interface FeedbackItem {
+    score: number;
+    tips: {
+      type: "good" | "improve";
+      tip: string;
+      explanation: string;
+    }[];
+  }
+
+  const SectionHeader = ({
+    title,
+    score,
+  }: {
+    title: string;
+    score: number;
+  }) => {
+    const getScoreConfig = (score: number) => {
+      if (score >= 75) {
+        return {
+          badgeColor: "bg-green-100",
+          badgeText: "text-green-700",
+          icon: CheckCircle,
+        };
+      } else if (score >= 50) {
+        return {
+          badgeColor: "bg-yellow-100",
+          badgeText: "text-yellow-700",
+          icon: AlertCircle,
+        };
+      } else {
+        return {
+          badgeColor: "bg-red-100",
+          badgeText: "text-red-700",
+          icon: XCircle,
+        };
+      }
+    };
+
+    const colorConfig = getScoreConfig(score);
+
+    return (
+      <div className="flex flex-row items-center gap-3">
+        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+        <div
+          className={`${colorConfig.badgeColor} px-2 rounded-xl flex flex-row items-center gap-2`}
+        >
+          <colorConfig.icon size={15} className={colorConfig.badgeText} />
+          <p className={colorConfig.badgeText}>{score}/100</p>
+        </div>
+      </div>
+    );
+  };
+
+  const FeedbackItem = ({ tips }: FeedbackItem) => {
+    const goodTips = tips.filter((tip) => tip.type === "good");
+    const improveTips = tips.filter((tip) => tip.type === "improve");
+    return (
+      <div className="flex flex-col gap-3 mt-2">
+        {goodTips.length > 0 &&
+          goodTips.map((tip) => (
+            <div className="bg-green-50 rounded-xl px-5 py-3 flex flex-col gap-2">
+              <div className="flex flex-row gap-3 items-center">
+                <CheckCircle className="text-green-800" />
+                <h3 className="font-semibold text-green-800">{tip.tip}</h3>
+              </div>
+              <p className="text-sm text-green-800">{tip.explanation}</p>
+            </div>
+          ))}
+        {improveTips.length > 0 &&
+          improveTips.map((tip) => (
+            <div className="bg-yellow-50 rounded-xl px-5 py-3 flex flex-col gap-2 ">
+              <div className="flex flex-row gap-3 items-center">
+                <AlertCircle className="text-yellow-800" />
+                <h3 className="font-semibold text-yellow-800">{tip.tip}</h3>
+              </div>
+              <p className="text-sm text-yellow-800">{tip.explanation}</p>
+            </div>
+          ))}
+      </div>
+    );
+  };
+
   return (
     <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
       <Navbar />
@@ -49,7 +136,23 @@ const Feedback = () => {
               <ScoreSummary feedback={feedback} />
               <ATSCard score={feedback.ATS.score} tips={feedback.ATS.tips} />
               {/* <FeedbackDetails /> */}
-              <Accordian feedback={feedback} />
+              {/* <Accordion feedback={feedback} /> */}
+              <Accordion>
+                <AccordionItem>
+                  <AccordionHeader id="tone-and-style">
+                    <SectionHeader
+                      title={"Tone and Style"}
+                      score={feedback.toneAndStyle.score}
+                    />
+                  </AccordionHeader>
+                  <AccordionContent id="tone-and-style">
+                    <FeedbackItem
+                      score={feedback.toneAndStyle.score}
+                      tips={feedback.toneAndStyle.tips}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           )}
         </section>
