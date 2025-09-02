@@ -23,7 +23,7 @@ const Auth = () => {
         return;
       }
       if (data.user) {
-        navigate("/upload");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

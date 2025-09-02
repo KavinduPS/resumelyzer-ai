@@ -33,7 +33,7 @@ export const AccordionHeader = ({ id, children }: AccordionHeaderProps) => {
   return (
     <button
       onClick={() => toggleItem(id)}
-      className="hover:cursor-pointer flex bg-white p-4 rounded-lg items-center justify-between"
+      className="w-full hover:cursor-pointer flex bg-white p-4 rounded-lg items-center justify-between"
     >
       {children}
       {isActive(id) ? (
@@ -60,7 +60,7 @@ interface AccordionItemProps {
 }
 
 export const AccordionItem = ({ children }: AccordionItemProps) => {
-  return <div>{children}</div>;
+  return <div className="bg-white rounded-lg shadow-sm">{children}</div>;
 };
 
 interface AccordionProps {
@@ -80,7 +80,7 @@ export const Accordion = ({ children }: AccordionProps) => {
 
   return (
     <AccordionContext.Provider value={{ activeItems, isActive, toggleItem }}>
-      {children}
+      <div className="flex flex-col gap-3">{children}</div>
     </AccordionContext.Provider>
   );
 };

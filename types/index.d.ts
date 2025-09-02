@@ -52,6 +52,7 @@ export interface Resume {
 }
 
 export interface CVFeedback {
+  id: string;
   company_name: string;
   job_title: string;
   job_description: string;

@@ -4,7 +4,7 @@ import React from "react";
 import type { CVFeedback } from "types";
 
 const useSupabase = () => {
-  const saveFeedback = async (feedback: CVFeedback) => {
+  const saveFeedback = async (feedback: Omit<CVFeedback, "id">) => {
     try {
       const { data, error } = await supabase
         .from("cv_feedback")
@@ -26,6 +26,18 @@ const useSupabase = () => {
         .select()
         .eq("id", id)
         .single();
+      if (error) {
+        console.log(error);
+      }
+      if (data) return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFeedbacks = async () => {
+    try {
+      const { data, error } = await supabase.from("cv_feedback").select();
       if (error) {
         console.log(error);
       }
@@ -65,7 +77,7 @@ const useSupabase = () => {
     } catch (error) {}
   };
 
-  return { saveFeedback, getFeedback, saveImage, getImage };
+  return { saveFeedback, getFeedback, getFeedbacks, saveImage, getImage };
 };
 
 export default useSupabase;
