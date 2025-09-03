@@ -1,10 +1,10 @@
 import { supabase } from "libs/supabase/client";
 import { sanitizeFileName } from "libs/utils";
-import React from "react";
+import React, { useCallback } from "react";
 import type { CVFeedback } from "types";
 
 const useSupabase = () => {
-  const saveFeedback = async (feedback: Omit<CVFeedback, "id">) => {
+  const saveFeedback = useCallback(async (feedback: Omit<CVFeedback, "id">) => {
     try {
       const { data, error } = await supabase
         .from("cv_feedback")
@@ -17,9 +17,9 @@ const useSupabase = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
-  const getFeedback = async (id: string) => {
+  const getFeedback = useCallback(async (id: string) => {
     try {
       const { data, error } = await supabase
         .from("cv_feedback")
@@ -33,7 +33,7 @@ const useSupabase = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   const getFeedbacks = async () => {
     try {
@@ -47,24 +47,27 @@ const useSupabase = () => {
     }
   };
 
-  const saveImage = async (userId: string, path: string, file: File) => {
-    try {
-      const filePath = sanitizeFileName(path);
-      const { data, error } = await supabase.storage
-        .from("resume-images")
-        .upload(`${userId}/${filePath}`, file, { upsert: true });
-      if (error) {
+  const saveImage = useCallback(
+    async (userId: string, path: string, file: File) => {
+      try {
+        const filePath = sanitizeFileName(path);
+        const { data, error } = await supabase.storage
+          .from("resume-images")
+          .upload(`${userId}/${filePath}`, file, { upsert: true });
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("image path", data.path);
+          return data.path;
+        }
+      } catch (error) {
         console.log(error);
-      } else {
-        console.log("image path", data.path);
-        return data.path;
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    []
+  );
 
-  const getImage = async (imageUrl: string) => {
+  const getImage = useCallback(async (imageUrl: string) => {
     try {
       console.log(imageUrl);
       const { data, error } = await supabase.storage
@@ -75,7 +78,7 @@ const useSupabase = () => {
       }
       return data;
     } catch (error) {}
-  };
+  }, []);
 
   return { saveFeedback, getFeedback, getFeedbacks, saveImage, getImage };
 };

@@ -18,8 +18,9 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const [session, setSession] = useState<Session | null>(null);
   const { getFeedbacks } = useSupabase();
-  const [feedbackData, setFeedbackData] = useState<CVFeedback[]>();
+  const [feedbacks, setFeedbacks] = useState<CVFeedback[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -30,22 +31,23 @@ export default function Home() {
       setSession(session);
     });
     return () => subscription.unsubscribe();
-  }, [session]);
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
       try {
         setIsLoading(true);
-        const feedbacks = await getFeedbacks();
-        setFeedbackData(feedbacks);
-        setIsLoading(false);
+        const data = await getFeedbacks();
+        setFeedbacks(data);
       } catch (error) {
-        setIsLoading(false);
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getData();
   }, []);
+
   return (
     <main className="bg-[url('/images/bg-main.png')] bg-cover min-h-screen p-5">
       <Navbar />
@@ -55,9 +57,13 @@ export default function Home() {
           <h2>Review your submissions and check AI-powered feedback.</h2>
         </div>
       </section>
-      {feedbackData && feedbackData?.length > 0 ? (
-        <div className="flex flex-wrap flex-col items-center justify-center gap-20 sm:flex-row max-sm:gap-5">
-          {feedbackData.map((feedback) => (
+      {isLoading ? (
+        <div className="p-30 flex items-center justify-center">
+          <img src="/images/resume-loading.gif" className="size-48" />
+        </div>
+      ) : feedbacks && feedbacks?.length > 0 ? (
+        <div className="w-full mx-auto grid grid-cols-1 md:w-11/12 md:grid-cols-3 gap-20 sm:flex-row max-sm:gap-5">
+          {feedbacks.map((feedback) => (
             <ResumeCard key={feedback.id} {...feedback} />
           ))}
         </div>
