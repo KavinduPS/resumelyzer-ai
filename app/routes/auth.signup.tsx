@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>();
+  const [successMessage, setSuccessMessage] = useState<string | null>();
   const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -14,7 +15,6 @@ const SignUp = () => {
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirm-password") as string;
     if (password !== confirmPassword) {
-      console.log(confirmPassword);
       setErrorMessage("Passwords must match");
       return;
     }
@@ -27,12 +27,14 @@ const SignUp = () => {
         },
       });
       if (error) {
-        setErrorMessage(error.message);
+        setErrorMessage(`${error.message}. Please Sign in!`);
         return;
       }
-      if (data) {
+      if (data.user) {
         console.log(data);
-        navigate("/");
+        setSuccessMessage(
+          `Registered successfully. Please confirm your email!`
+        );
       }
     } catch (error) {
       console.log(error);
@@ -87,6 +89,11 @@ const SignUp = () => {
         {errorMessage && (
           <div className="bg-rose-200 rounded-xl text-center px-2 py-1">
             <p className="text-black text-sm">{errorMessage}</p>
+          </div>
+        )}
+        {successMessage && (
+          <div className="bg-green-200 rounded-xl text-center px-2 py-1">
+            <p className="text-black text-sm">{successMessage}</p>
           </div>
         )}
       </form>
