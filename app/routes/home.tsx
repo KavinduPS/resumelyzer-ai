@@ -1,6 +1,5 @@
 import Navbar from "~/components/Navbar";
 import type { Route } from "./+types/home";
-import { resumes } from "~/constants";
 import ResumeCard from "~/components/ResumeCard";
 import { useEffect, useState } from "react";
 import { supabase } from "libs/supabase/client";

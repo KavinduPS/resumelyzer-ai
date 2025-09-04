@@ -37,11 +37,11 @@ const Navbar = () => {
         {session ? (
           <Link to={"/"} onClick={() => handleSignout()}>
             <button className="secondary-button">
-              <p>Logout</p>
+              <p>Sign Out</p>
             </button>
           </Link>
         ) : (
-          <Link to={"/upload"}>
+          <Link to={"/auth"}>
             <button className="secondary-button">
               <p>Login</p>
             </button>
