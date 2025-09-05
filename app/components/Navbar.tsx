@@ -29,23 +29,34 @@ const Navbar = () => {
         <p className="font-bold text-xl">RESUMELYZER</p>
       </Link>
       <div className="flex gap-3 flex-wrap">
-        <Link to={"/upload"}>
-          <button className="primary-button">
-            <p className="text-nowrap">Upload Resume</p>
-          </button>
-        </Link>
         {session ? (
-          <Link to={"/"} onClick={() => handleSignout()}>
-            <button className="secondary-button">
-              <p>Sign Out</p>
-            </button>
-          </Link>
+          <>
+            <Link to={"/upload"}>
+              <button className="primary-button">
+                <p className="text-nowrap">Upload Resume</p>
+              </button>
+            </Link>
+            <Link to={"/"} onClick={() => handleSignout()}>
+              <button className="secondary-button">
+                <p>Sign Out</p>
+              </button>
+            </Link>
+          </>
         ) : (
-          <Link to={"/auth"}>
-            <button className="secondary-button">
-              <p>Login</p>
-            </button>
-          </Link>
+          <>
+            <Link to={"/auth"}>
+              <button className="secondary-button">
+                <p>Login</p>
+              </button>
+            </Link>
+            <Link to={"/auth/signup"}>
+              <div className="animate-rotate-border bg-conic/[from_var(--border-angle)] from-indigo-400 via-indigo-800 to-indigo-400 rounded-full p-[1px]">
+                <button className="primary-button">
+                  <p>Get Started</p>
+                </button>
+              </div>
+            </Link>
+          </>
         )}
       </div>
     </nav>

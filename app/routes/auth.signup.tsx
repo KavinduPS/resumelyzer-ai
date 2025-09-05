@@ -41,7 +41,7 @@ const SignUp = () => {
     }
   };
   return (
-    <div className="p-8 max-w-md w-full flex flex-col gap-5">
+    <div className="px-8 max-w-md w-full flex flex-col gap-5">
       <form
         className="flex flex-col justify-center gap-8 "
         onSubmit={handleSubmit}

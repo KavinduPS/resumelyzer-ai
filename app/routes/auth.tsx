@@ -8,7 +8,7 @@ const Auth = () => {
     <div className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
       <Navbar />
       <section className="flex justify-center">
-        <div className="p-8  max-w-md w-full mt-10 flex flex-col gap-5">
+        <div className="p-8 max-w-md w-full mt-10 flex flex-col gap-5">
           <h1 className="text-2xl font-bold text-center text-gray-800">
             Welcome
           </h1>

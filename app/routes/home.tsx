@@ -6,6 +6,7 @@ import { supabase } from "libs/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import useSupabase from "hooks/supabase/useSupabase";
 import type { CVFeedback, Feedback } from "types";
+import Landing from "~/components/Landing";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -46,6 +47,10 @@ export default function Home() {
     };
     getData();
   }, []);
+
+  if (!session) {
+    return <Landing />;
+  }
 
   return (
     <main className="bg-[url('/images/bg-main.png')] bg-cover min-h-screen p-5">
