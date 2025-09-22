@@ -1,11 +1,12 @@
-import { supabase } from "libs/supabase/client";
-import React, { useState, type FormEvent } from "react";
+import React, { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
-import Navbar from "~/components/Navbar";
+import { useAuthContext } from "~/context/authContext";
 
 const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const navigate = useNavigate();
+  const { signIn, user } = useAuthContext();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -14,27 +15,24 @@ const SignIn = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setErrorMessage(error.message);
-        return;
-      }
-      if (data.user) {
-        navigate("/");
-      }
+      await signIn(email, password);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  });
 
   return (
     <div className="px-8 max-w-md w-full flex flex-col gap-5">
       <form
         className="flex flex-col justify-center gap-8 "
         onSubmit={handleSubmit}
+        method="POST"
       >
         <div className="form-item">
           <label htmlFor="email" className="text-sm">

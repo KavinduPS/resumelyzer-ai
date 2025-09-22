@@ -1,11 +1,13 @@
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "libs/supabase/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useAuthContext } from "~/context/authContext";
 
 const Navbar = () => {
   const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
+  const { signOut } = useAuthContext();
 
   useEffect(() => {
     const getSession = async () => {
@@ -14,14 +16,6 @@ const Navbar = () => {
     };
     getSession();
   }, [session]);
-
-  const handleSignout = async () => {
-    console.log("out");
-    const out = await supabase.auth.signOut();
-    console.log(out);
-    setSession(null);
-    navigate("/");
-  };
 
   return (
     <nav className="bg-white backdrop-blur-xs flex flex-row items-center justify-between rounded-full mx-0 py-2 px-5">
@@ -36,7 +30,7 @@ const Navbar = () => {
                 <p className="text-nowrap">Upload Resume</p>
               </button>
             </Link>
-            <Link to={"/"} onClick={() => handleSignout()}>
+            <Link to={"/"} onClick={signOut}>
               <button className="secondary-button">
                 <p>Sign Out</p>
               </button>
