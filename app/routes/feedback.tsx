@@ -11,6 +11,7 @@ import {
 } from "~/components/Accordian";
 import ATSCard from "~/components/ATSCard";
 import Navbar from "~/components/Navbar";
+import { ProtectedRoute } from "~/components/ProtectedRoute";
 import ScoreSummary from "~/components/ScoreSummary";
 
 const Feedback = () => {
@@ -125,86 +126,88 @@ const Feedback = () => {
   };
 
   return (
-    <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
-      <Navbar />
-      <h1 className="my-10">Resume Review</h1>
-      <div className="w-full flex flex-col-reverse gap-5 md:flex-row">
-        <section className="flex items-center justify-center p-10 sticky top-10 max-h-screen w-full md:py-50">
-          {cvImage && (
-            <img
-              src={URL.createObjectURL(cvImage)}
-              className="object-contain max-w-full max-h-screen"
-            />
-          )}
-        </section>
-        <section className="flex flex-col justify-center items-center gap-5 w-full">
-          {feedback && (
-            <div className="flex flex-col gap-5">
-              <ScoreSummary feedback={feedback} />
-              <ATSCard score={feedback.ATS.score} tips={feedback.ATS.tips} />
-              <Accordion>
-                <AccordionItem>
-                  <AccordionHeader id="tone-and-style">
-                    <SectionHeader
-                      title={"Tone and Style"}
-                      score={feedback.toneAndStyle.score}
-                    />
-                  </AccordionHeader>
-                  <AccordionContent id="tone-and-style">
-                    <SectionContent
-                      score={feedback.toneAndStyle.score}
-                      tips={feedback.toneAndStyle.tips}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem>
-                  <AccordionHeader id="content">
-                    <SectionHeader
-                      title={"Content"}
-                      score={feedback.content.score}
-                    />
-                  </AccordionHeader>
-                  <AccordionContent id="content">
-                    <SectionContent
-                      score={feedback.content.score}
-                      tips={feedback.content.tips}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem>
-                  <AccordionHeader id="structure">
-                    <SectionHeader
-                      title={"Structure"}
-                      score={feedback.structure.score}
-                    />
-                  </AccordionHeader>
-                  <AccordionContent id="structure">
-                    <SectionContent
-                      score={feedback.structure.score}
-                      tips={feedback.structure.tips}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem>
-                  <AccordionHeader id="skills">
-                    <SectionHeader
-                      title={"Skills"}
-                      score={feedback.skills.score}
-                    />
-                  </AccordionHeader>
-                  <AccordionContent id="skills">
-                    <SectionContent
-                      score={feedback.skills.score}
-                      tips={feedback.skills.tips}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          )}
-        </section>
-      </div>
-    </main>
+    <ProtectedRoute>
+      <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
+        <Navbar />
+        <h1 className="my-10">Resume Review</h1>
+        <div className="w-full flex flex-col-reverse gap-5 md:flex-row">
+          <section className="flex items-center justify-center p-10 sticky top-10 max-h-screen w-full md:py-50">
+            {cvImage && (
+              <img
+                src={URL.createObjectURL(cvImage)}
+                className="object-contain max-w-full max-h-screen"
+              />
+            )}
+          </section>
+          <section className="flex flex-col justify-center items-center gap-5 w-full">
+            {feedback && (
+              <div className="flex flex-col gap-5">
+                <ScoreSummary feedback={feedback} />
+                <ATSCard score={feedback.ATS.score} tips={feedback.ATS.tips} />
+                <Accordion>
+                  <AccordionItem>
+                    <AccordionHeader id="tone-and-style">
+                      <SectionHeader
+                        title={"Tone and Style"}
+                        score={feedback.toneAndStyle.score}
+                      />
+                    </AccordionHeader>
+                    <AccordionContent id="tone-and-style">
+                      <SectionContent
+                        score={feedback.toneAndStyle.score}
+                        tips={feedback.toneAndStyle.tips}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader id="content">
+                      <SectionHeader
+                        title={"Content"}
+                        score={feedback.content.score}
+                      />
+                    </AccordionHeader>
+                    <AccordionContent id="content">
+                      <SectionContent
+                        score={feedback.content.score}
+                        tips={feedback.content.tips}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader id="structure">
+                      <SectionHeader
+                        title={"Structure"}
+                        score={feedback.structure.score}
+                      />
+                    </AccordionHeader>
+                    <AccordionContent id="structure">
+                      <SectionContent
+                        score={feedback.structure.score}
+                        tips={feedback.structure.tips}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader id="skills">
+                      <SectionHeader
+                        title={"Skills"}
+                        score={feedback.skills.score}
+                      />
+                    </AccordionHeader>
+                    <AccordionContent id="skills">
+                      <SectionContent
+                        score={feedback.skills.score}
+                        tips={feedback.skills.tips}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            )}
+          </section>
+        </div>
+      </main>
+    </ProtectedRoute>
   );
 };
 

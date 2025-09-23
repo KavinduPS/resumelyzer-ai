@@ -10,7 +10,7 @@ import { supabase } from "libs/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import useSupabase from "hooks/supabase/useSupabase";
 import { convertPdfToImage } from "libs/utils";
-import SignIn from "./auth.signin";
+import { ProtectedRoute } from "~/components/ProtectedRoute";
 
 interface ResumeData {
   companyName: string;
@@ -27,21 +27,6 @@ const upload = () => {
   const [session, setSession] = useState<Session | null>(null);
   const { saveFeedback, saveImage } = useSupabase();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (!session) {
-        navigate("/auth");
-      }
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-    return () => subscription.unsubscribe();
-  }, [session]);
 
   const handleFileSelect = (file: File | null) => {
     setFile(file);
@@ -105,70 +90,72 @@ const upload = () => {
   };
 
   return (
-    <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
-      <Navbar />
-      <section>
-        <div className="flex flex-col items-center my-10 gap-8">
-          <h1>Smart Feedback for Your Dream Job</h1>
-          {isProcessing ? (
-            <>
-              <h2>{statusText}</h2>
-              {image && <img src={image} className="size-64" />}
-              <img src="/images/resume-upload.gif" className="size-48"></img>
-            </>
-          ) : (
-            <h2>Drop Your Resume for ATS Score and Feedback</h2>
-          )}
-          {!isProcessing && (
-            <form
-              className="flex flex-col gap-8 w-2/4 max-md:w-3/4"
-              onSubmit={handleSubmit}
-            >
-              <div className="form-item">
-                <label htmlFor="company-name" className="text-sm">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Company name"
-                  name="company-name"
-                  className="input-item"
-                />
-              </div>
-              <div className="form-item">
-                <label htmlFor="job-title" className="text-sm">
-                  Job Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="Job title"
-                  name="job-title"
-                  className="input-item"
-                />
-              </div>
-              <div className="form-item">
-                <label htmlFor="job-description" className="text-sm">
-                  Job Description
-                </label>
-                <textarea
-                  rows={5}
-                  placeholder="Job description"
-                  name="job-description"
-                  className="input-item"
-                />
-              </div>
-              <div className="form-item">
-                <label htmlFor="uploader" className="text-sm">
-                  Upload resume
-                </label>
-                <FileUploader onFileSelect={handleFileSelect} />
-              </div>
-              <button className="primary-button">Analyze resume</button>
-            </form>
-          )}
-        </div>
-      </section>
-    </main>
+    <ProtectedRoute>
+      <main className="bg-[url('/images/bg-main.png')] bg-cover p-5 min-h-screen">
+        <Navbar />
+        <section>
+          <div className="flex flex-col items-center my-10 gap-8">
+            <h1>Smart Feedback for Your Dream Job</h1>
+            {isProcessing ? (
+              <>
+                <h2>{statusText}</h2>
+                {image && <img src={image} className="size-64" />}
+                <img src="/images/resume-upload.gif" className="size-48"></img>
+              </>
+            ) : (
+              <h2>Drop Your Resume for ATS Score and Feedback</h2>
+            )}
+            {!isProcessing && (
+              <form
+                className="flex flex-col gap-8 w-2/4 max-md:w-3/4"
+                onSubmit={handleSubmit}
+              >
+                <div className="form-item">
+                  <label htmlFor="company-name" className="text-sm">
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Company name"
+                    name="company-name"
+                    className="input-item"
+                  />
+                </div>
+                <div className="form-item">
+                  <label htmlFor="job-title" className="text-sm">
+                    Job Title
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Job title"
+                    name="job-title"
+                    className="input-item"
+                  />
+                </div>
+                <div className="form-item">
+                  <label htmlFor="job-description" className="text-sm">
+                    Job Description
+                  </label>
+                  <textarea
+                    rows={5}
+                    placeholder="Job description"
+                    name="job-description"
+                    className="input-item"
+                  />
+                </div>
+                <div className="form-item">
+                  <label htmlFor="uploader" className="text-sm">
+                    Upload resume
+                  </label>
+                  <FileUploader onFileSelect={handleFileSelect} />
+                </div>
+                <button className="primary-button">Analyze resume</button>
+              </form>
+            )}
+          </div>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 };
 

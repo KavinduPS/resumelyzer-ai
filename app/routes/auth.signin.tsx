@@ -17,7 +17,7 @@ const SignIn = () => {
     try {
       await signIn(email, password);
     } catch (error) {
-      console.log(error);
+      setErrorMessage("An unexpected error occurred");
     }
   };
 
@@ -25,7 +25,7 @@ const SignIn = () => {
     if (user) {
       navigate("/");
     }
-  });
+  }, [user, navigate]);
 
   return (
     <div className="px-8 max-w-md w-full flex flex-col gap-5">
@@ -40,7 +40,7 @@ const SignIn = () => {
           </label>
           <input
             type="email"
-            placeholder="john@email.om"
+            placeholder="john@email.com"
             name="email"
             className="input-item"
           />

@@ -7,6 +7,7 @@ import type { Session } from "@supabase/supabase-js";
 import useSupabase from "hooks/supabase/useSupabase";
 import type { CVFeedback, Feedback } from "types";
 import Landing from "~/components/Landing";
+import { useAuthContext } from "~/context/authContext";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,18 +21,7 @@ export default function Home() {
   const { getFeedbacks } = useSupabase();
   const [feedbacks, setFeedbacks] = useState<CVFeedback[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const getData = async () => {
@@ -48,7 +38,7 @@ export default function Home() {
     getData();
   }, []);
 
-  if (!session) {
+  if (!user) {
     return <Landing />;
   }
 
